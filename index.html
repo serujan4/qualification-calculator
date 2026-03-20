@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Calculateur de qualification hypothécaire</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f8f7f4;color:#1a1a1a;min-height:100vh;padding:2rem 1rem}
+.wrap{max-width:740px;margin:0 auto}
+h1{font-size:26px;font-weight:600;color:#1a1a1a;margin-bottom:8px}
+.sub{font-size:15px;color:#555;line-height:1.6;margin-bottom:2rem}
+.si{display:flex;gap:8px;margin-bottom:1.5rem;align-items:center}
+.sd{width:30px;height:30px;border-radius:50%;border:1.5px solid #ccc;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#999;background:#fff;transition:all .2s}
+.sd.active{background:#1a1a1a;color:#fff;border-color:#1a1a1a}
+.sd.done{background:#1D9E75;color:#fff;border-color:#1D9E75}
+.sl{flex:1;height:1px;background:#e0e0e0}
+.slb{font-size:13px;color:#999;margin-left:6px}
+.card{background:#fff;border:1px solid #e8e8e8;border-radius:14px;padding:1.75rem;margin-bottom:1rem;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.ct{font-size:16px;font-weight:600;color:#1a1a1a;margin-bottom:1.25rem}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.fg{display:flex;flex-direction:column;gap:6px}
+label{font-size:12px;color:#777;font-weight:500;letter-spacing:.02em;text-transform:uppercase}
+input,select{width:100%;padding:10px 13px;font-size:15px;border:1.5px solid #e0e0e0;border-radius:8px;background:#fafafa;color:#1a1a1a;font-family:inherit;transition:border .15s}
+input:focus,select:focus{outline:none;border-color:#1a1a1a;background:#fff}
+.br{display:flex;gap:10px;margin-top:1.25rem}
+.btn{padding:11px 22px;font-size:15px;font-weight:600;border-radius:9px;border:1.5px solid #1a1a1a;background:#1a1a1a;color:#fff;cursor:pointer;font-family:inherit;transition:opacity .15s}
+.btn:hover{opacity:.85}
+.btng{background:#fff;color:#1a1a1a}
+.btng:hover{background:#f5f5f5;opacity:1}
+.pb{background:#e8e8e8;border-radius:4px;height:4px;margin:1rem 0;overflow:hidden}
+.pf{height:100%;background:#1a1a1a;border-radius:4px;transition:width .12s}
+.pm{font-size:14px;color:#777;text-align:center;margin-bottom:.5rem}
+.mg{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:1.25rem}
+.m{background:#f5f5f5;border-radius:10px;padding:1rem}
+.ml{font-size:11px;color:#999;margin-bottom:4px;text-transform:uppercase;letter-spacing:.05em}
+.mv{font-size:21px;font-weight:700;color:#1a1a1a}
+.green{color:#1D9E75}.amber{color:#c97a0a}.red{color:#c94040}
+.dv{height:1px;background:#f0f0f0;margin:1.25rem 0}
+.lt{width:100%;border-collapse:collapse;font-size:13px}
+.lt th{font-size:10px;color:#999;font-weight:700;text-align:left;padding:7px 8px;border-bottom:1px solid #f0f0f0;text-transform:uppercase;letter-spacing:.04em}
+.lt td{padding:10px 8px;border-bottom:1px solid #f5f5f5;color:#1a1a1a;vertical-align:top;font-size:13px}
+.lt tr:last-child td{border-bottom:none}
+.lt tr.tier-sep td{background:#f8f8f8;font-size:11px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.05em;padding:6px 8px}
+.bk{display:inline-block;font-size:11px;padding:3px 10px;border-radius:20px;font-weight:600}
+.bg0{background:#E1F5EE;color:#0F6E56}.ba{background:#FEF3CD;color:#7d5a00}.br0{background:#FCEBEB;color:#a02020}.bb{background:#E6F1FB;color:#1055a0}.bgr{background:#f0f0f0;color:#555}
+.sbs{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:.75rem}
+.lc{background:#fff;border:1.5px solid #e8e8e8;border-radius:10px;padding:1.25rem}
+.lt2{font-size:11px;font-weight:600;color:#999;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.la{font-size:26px;font-weight:700;color:#1D9E75;margin-bottom:4px}
+.ld{font-size:12px;color:#999;line-height:1.6}
+.disc{background:#f8f8f8;border-left:3px solid #ccc;border-radius:0 6px 6px 0;padding:10px 14px;margin-top:10px}
+.disc p{font-size:11px;color:#999;line-height:1.6}
+.ait{font-size:15px;color:#1a1a1a;line-height:1.85}
+.pw{font-size:11px;color:#bbb;text-align:right;margin-top:10px}
+.rb{display:flex;flex-direction:column;gap:10px;margin-bottom:1rem}
+.rr{display:flex;flex-direction:column;gap:4px}
+.rh{display:flex;justify-content:space-between;align-items:center}
+.rn{font-size:12px;font-weight:500;color:#777}
+.bt2{background:#eee;border-radius:4px;height:8px;overflow:hidden;position:relative}
+.bf{height:100%;border-radius:4px;transition:width .4s}
+.blx{position:absolute;top:0;height:100%;width:2px;background:#aaa;opacity:.6}
+.cc{background:#1a1a1a;border-radius:14px;padding:1.5rem;text-align:center;margin-bottom:1rem}
+.cc p{font-size:14px;color:#aaa;margin-bottom:12px}
+.ccb{display:inline-block;padding:11px 26px;font-size:14px;font-weight:600;border-radius:8px;border:1.5px solid #444;background:transparent;color:#fff;cursor:pointer;font-family:inherit;transition:background .15s}
+.ccb:hover{background:#333}
+.err{font-size:12px;color:#c94040;margin-top:6px;display:none}
+.hidden{display:none}
+.dph{background:#E1F5EE;border:1.5px solid #9FE1CB;border-radius:10px;padding:1rem;display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem}
+.dpl{font-size:13px;color:#0F6E56;font-weight:600}
+.dpv{font-size:18px;font-weight:700;color:#085041}
+.lv{background:#f8f8f8;border-radius:10px;padding:1rem;margin-bottom:10px}
+.lvt{font-size:14px;font-weight:600;color:#1a1a1a;margin-bottom:3px}
+.lvd{font-size:13px;color:#666;line-height:1.6}
+.lvi{font-size:13px;font-weight:600;color:#1D9E75;margin-top:4px}
+.sc{display:flex;align-items:center;gap:18px;padding:1.25rem;background:#f5f5f5;border-radius:12px;margin-bottom:1.25rem}
+.scr{width:72px;height:72px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-direction:column;border:3px solid #ccc}
+.sn{font-size:22px;font-weight:700}
+.slbl2{font-size:10px;color:#999;text-transform:uppercase;letter-spacing:.06em}
+.sdt{font-size:15px;font-weight:600;color:#1a1a1a;margin-bottom:4px}
+.sds{font-size:13px;color:#777;line-height:1.5}
+.simbanner{background:#EBF4FF;border:1.5px solid #bdd8f5;border-radius:10px;padding:12px 16px;margin-bottom:1rem;font-size:14px;color:#1055a0;font-weight:500}
+.simgrid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem}
+.simres{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:1rem}
+.smc{background:#fff;border:1.5px solid #e8e8e8;border-radius:10px;padding:.875rem;text-align:center}
+.smcl{font-size:11px;color:#999;margin-bottom:4px;text-transform:uppercase;letter-spacing:.03em}
+.smcb{font-size:12px;color:#bbb;text-decoration:line-through;margin-bottom:3px}
+.smca{font-size:17px;font-weight:700}
+.smd{font-size:12px;margin-top:3px;font-weight:600}
+.dp{color:#1D9E75}.dn{color:#c94040}.dn2{color:#bbb}
+.pdfbtn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:13px;font-size:15px;font-weight:600;border-radius:10px;border:1.5px solid #e0e0e0;background:#f5f5f5;color:#1a1a1a;cursor:pointer;font-family:inherit;margin-top:.75rem;transition:background .15s}
+.pdfbtn:hover{background:#eee}
+.pdfmsg{font-size:13px;color:#777;text-align:center;margin-top:8px;line-height:1.5;display:none}
+.priv-box{background:#f0f0f0;border:1.5px solid #ddd;border-radius:10px;padding:1rem;margin-bottom:.75rem}
+.priv-label{font-size:11px;font-weight:700;color:#777;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.priv-val{font-size:22px;font-weight:700;color:#555;margin-bottom:3px}
+.priv-detail{font-size:12px;color:#999;line-height:1.5}
+@media(max-width:600px){.g2,.sbs,.simgrid,.mg,.simres{grid-template-columns:1fr}.lt th:nth-child(3),.lt td:nth-child(3),.lt th:nth-child(4),.lt td:nth-child(4){display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- GATEKEEPER -->
+<div id="gate">
+  <div style="text-align:center;margin-bottom:2rem">
+    <div style="display:inline-block;background:#1a1a1a;color:#fff;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:6px 16px;border-radius:20px;margin-bottom:1.25rem">Outil exclusif — accès gratuit</div>
+    <h2 style="font-size:22px;font-weight:700;color:#1a1a1a;margin-bottom:10px;line-height:1.3">Découvrez ce que votre banque ne vous dira jamais</h2>
+    <p style="font-size:15px;color:#555;line-height:1.65;max-width:480px;margin:0 auto">Capacité hypothécaire, marges de crédit, admissibilité par prêteur — analysés selon les critères officiels de RBC, TD, BMO, CIBC, Scotia, Desjardins et plus.</p>
+  </div>
+  <div style="background:#fff;border:1px solid #e8e8e8;border-radius:14px;padding:2rem;box-shadow:0 1px 3px rgba(0,0,0,.04);max-width:460px;margin:0 auto">
+    <p style="font-size:13px;font-weight:600;color:#1a1a1a;margin-bottom:1.25rem;text-align:center">Entrez vos informations pour accéder à l'outil</p>
+    <div style="display:flex;flex-direction:column;gap:.875rem">
+      <div class="fg"><label>Prénom et nom</label><input type="text" id="g_name" placeholder="ex: Marie Tremblay" autocomplete="name"/></div>
+      <div class="fg"><label>Adresse courriel</label><input type="email" id="g_email" placeholder="ex: marie@gmail.com" autocomplete="email"/></div>
+      <div class="fg"><label>Numéro de téléphone</label><input type="tel" id="g_phone" placeholder="ex: 514 555-0123" autocomplete="tel"/></div>
+    </div>
+    <p class="err" id="gate_err" style="margin-top:.5rem">Veuillez remplir tous les champs pour continuer.</p>
+    <button class="btn" style="width:100%;margin-top:1.25rem;font-size:15px;padding:13px" onclick="unlockTool()">Accéder à mon analyse gratuite →</button>
+    <p style="font-size:11px;color:#bbb;text-align:center;margin-top:.875rem;line-height:1.6">Vos informations sont confidentielles. Analyse 100% gratuite — aucune carte de crédit requise.</p>
+  </div>
+  <div style="display:flex;justify-content:center;gap:2.5rem;margin-top:1.75rem;flex-wrap:wrap">
+    <div style="text-align:center"><div style="font-size:20px;font-weight:700;color:#1a1a1a">10+</div><div style="font-size:12px;color:#999">Prêteurs analysés</div></div>
+    <div style="text-align:center"><div style="font-size:20px;font-weight:700;color:#1a1a1a">2 min</div><div style="font-size:12px;color:#999">Pour votre résultat</div></div>
+    <div style="text-align:center"><div style="font-size:20px;font-weight:700;color:#1a1a1a">100%</div><div style="font-size:12px;color:#999">Gratuit</div></div>
+  </div>
+</div>
+
+<!-- TOOL -->
+<div id="tool" class="hidden">
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;padding-bottom:.875rem;border-bottom:1px solid #f0f0f0">
+  <div style="font-size:13px;color:#999">Analyse pour <span id="user_name_display" style="font-weight:600;color:#1a1a1a"></span></div>
+  <div style="font-size:12px;color:#bbb">Serujan.ca</div>
+</div>
+
+<h1>Calculateur de qualification</h1>
+<p class="sub">Capacité d'emprunt, mise de fonds, marge de crédit — analysés par prêteur. Avec simulateur temps réel et rapport PDF téléchargeable.</p>
+
+<div class="si">
+  <div class="sd active" id="d1">1</div><div class="sl"></div>
+  <div class="sd" id="d2">2</div><div class="sl"></div>
+  <div class="sd" id="d3">3</div>
+  <div class="slb" id="slb">Revenus &amp; emploi</div>
+</div>
+
+<div id="s1">
+  <div class="card"><div class="ct">Revenus &amp; type d'emploi</div>
+    <div class="g2">
+      <div class="fg"><label>Revenu annuel brut ($)</label><input type="number" id="inc" placeholder="ex: 85 000" min="0"/></div>
+      <div class="fg"><label>Co-emprunteur ($) — optionnel</label><input type="number" id="inc2" placeholder="ex: 45 000" min="0"/></div>
+      <div class="fg"><label>Type d'emploi</label><select id="emp"><option value="salarie">Salarié (temps plein)</option><option value="parttime">Salarié (temps partiel)</option><option value="autonome">Travailleur autonome</option><option value="mixte">Revenus mixtes</option></select></div>
+      <div class="fg"><label>Score de crédit</label><select id="cred"><option value="excellent">Excellent (750+)</option><option value="bon">Bon (700–749)</option><option value="passable">Passable (650–699)</option><option value="faible">Faible (moins de 650)</option></select></div>
+      <div class="fg"><label>Années en emploi</label><select id="yrs"><option value="2plus">2 ans et plus</option><option value="1to2">1 à 2 ans</option><option value="less1">Moins d'un an</option></select></div>
+      <div class="fg"><label>Taux hypothécaire estimé (%)</label><input type="number" id="rt" step="0.01" min="0" max="15" value="4.89"/></div>
+    </div>
+  </div>
+  <div class="br"><button class="btn" onclick="go(2)">Continuer →</button></div>
+  <p class="err" id="e1">Veuillez entrer votre revenu.</p>
+</div>
+
+<div id="s2" class="hidden">
+  <div class="card"><div class="ct">Dettes &amp; obligations mensuelles</div>
+    <div class="g2">
+      <div class="fg"><label>Paiement hypothécaire actuel ($/mois)</label><input type="number" id="mrt" value="0" min="0"/></div>
+      <div class="fg"><label>Paiements auto ($/mois)</label><input type="number" id="car" value="0" min="0"/></div>
+      <div class="fg"><label>Cartes de crédit — paiement min. ($/mois)</label><input type="number" id="crd" value="0" min="0"/></div>
+      <div class="fg"><label>Marges existantes ($/mois)</label><input type="number" id="loc" value="0" min="0"/></div>
+      <div class="fg"><label>Autres dettes ($/mois)</label><input type="number" id="oth" value="0" min="0"/></div>
+      <div class="fg"><label>Épargne disponible pour mise de fonds ($)</label><input type="number" id="sav" placeholder="ex: 30 000" min="0"/></div>
+    </div>
+  </div>
+  <div class="br"><button class="btn btng" onclick="go(1)">← Retour</button><button class="btn" onclick="go(3)">Continuer →</button></div>
+  <p class="err" id="e2">Veuillez remplir les champs.</p>
+</div>
+
+<div id="s3" class="hidden">
+  <div class="card"><div class="ct">Propriété visée</div>
+    <div class="g2">
+      <div class="fg"><label>Valeur de la propriété ($)</label><input type="number" id="pv" placeholder="ex: 450 000" min="0"/></div>
+      <div class="fg"><label>Type de propriété</label><select id="pt"><option value="condo">Condo / unifamiliale</option><option value="duplex">Duplex (occupé)</option><option value="triplex">Triplex (occupé)</option><option value="quadruplex">Quadruplex (occupé)</option><option value="5plus">5 logements et plus</option></select></div>
+      <div class="fg"><label>Solde hypothécaire actuel ($)</label><input type="number" id="mb" value="0" min="0"/></div>
+      <div class="fg"><label>Revenus locatifs actuels ($/mois)</label><input type="number" id="ren" value="0" min="0"/></div>
+    </div>
+  </div>
+  <div class="br"><button class="btn btng" onclick="go(2)">← Retour</button><button class="btn" onclick="run()">Analyser mon profil</button></div>
+  <p class="err" id="e3">Veuillez indiquer la valeur de la propriété.</p>
+</div>
+
+<div id="sl" class="hidden">
+  <div class="card" style="text-align:center;padding:2.5rem 2rem">
+    <div class="pm" id="pm">Vérification des critères bancaires canadiens...</div>
+    <div class="pb"><div class="pf" id="pf" style="width:0%"></div></div>
+  </div>
+</div>
+
+<div id="res" class="hidden">
+
+  <div class="card">
+    <div class="ct">Score de dossier &amp; qualification</div>
+    <div class="sc" id="sc"></div>
+    <div class="mg" id="mtop"></div>
+    <div class="rb" id="ratbars"></div>
+    <div class="dv"></div>
+    <div class="dph" id="dph"></div>
+    <div class="sbs" id="locs"></div>
+    <div class="disc"><p>La marge de crédit non garantie est une estimation basée sur les pratiques générales des institutions financières canadiennes. Le montant réel est à la discrétion du prêteur. Cette analyse ne constitue pas une approbation officielle. Consultez un courtier hypothécaire agréé.</p></div>
+  </div>
+
+  <div class="card">
+    <div class="ct">Simulateur — modifie et vois l'impact instantanément</div>
+    <div class="simbanner">⚡ Ajuste n'importe quel chiffre ci-dessous pour voir comment ça change ta qualification en temps réel.</div>
+    <div class="simgrid">
+      <div class="fg"><label>Si je rembourse cette dette/mois ($)</label><input type="number" id="sd1x" placeholder="ex: 400" value="0" oninput="sim()"/></div>
+      <div class="fg"><label>Si j'augmente mes revenus annuels ($)</label><input type="number" id="sd2x" placeholder="ex: 10 000" value="0" oninput="sim()"/></div>
+      <div class="fg"><label>Si j'ajoute à ma mise de fonds ($)</label><input type="number" id="sd3x" placeholder="ex: 15 000" value="0" oninput="sim()"/></div>
+      <div class="fg"><label>Si j'ajoute des revenus locatifs ($/mois)</label><input type="number" id="sd4x" placeholder="ex: 1 200" value="0" oninput="sim()"/></div>
+    </div>
+    <div class="simres" id="simres"></div>
+    <div style="margin-top:1.25rem" id="simrat"></div>
+  </div>
+
+  <div class="card"><div class="ct">Leviers pour améliorer votre qualification</div><div id="levs"></div></div>
+
+  <div class="card">
+    <div class="ct">Admissibilité par prêteur</div>
+    <table class="lt">
+      <thead><tr><th>Prêteur</th><th>Capacité d'emprunt</th><th>HELOC</th><th>Marge non garantie</th><th>Statut</th></tr></thead>
+      <tbody id="ltb"></tbody>
+    </table>
+  </div>
+
+  <div class="card"><div class="ct">Analyse de l'agent</div><div class="ait" id="ait"></div><div class="pw">Analyse IA — à titre informatif seulement</div></div>
+
+  <div class="card">
+    <div class="ct">Votre rapport personnalisé</div>
+    <p style="font-size:14px;color:#777;margin-bottom:.75rem">Score, ratios, capacité, marges, leviers et analyse IA. Partageable avec un courtier ou votre conjoint.</p>
+    <button class="pdfbtn" onclick="dlPDF()">↓ &nbsp; Générer mon rapport PDF</button>
+    <div class="pdfmsg" id="pdfmsg">Rapport en cours de génération — Claude va le produire et vous l'envoyer dans quelques secondes.</div>
+  </div>
+
+  <div class="cc">
+    <p>Prêt à passer à l'action? Un courtier peut maximiser vos options en moins de 48h.</p>
+    <button class="ccb" onclick="window.open('https://calendly.com/serujank/15m-avec-serujan-questions','_blank')">Parler à un courtier →</button>
+  </div>
+
+</div><!-- end #res -->
+</div><!-- end #tool -->
+
+<script>
+const fc=n=>new Intl.NumberFormat('fr-CA',{style:'currency',currency:'CAD',maximumFractionDigits:0}).format(n);
+const fp=n=>Math.round(n*100)+'%';
+let G={};
+
+function unlockTool(){
+  const name=document.getElementById('g_name').value.trim();
+  const email=document.getElementById('g_email').value.trim();
+  const phone=document.getElementById('g_phone').value.trim();
+  const emailOk=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const phoneOk=phone.replace(/\D/g,'').length>=10;
+  if(!name||!emailOk||!phoneOk){
+    document.getElementById('gate_err').style.display='block';
+    return;
+  }
+  document.getElementById('gate_err').style.display='none';
+  G.clientName=name; G.clientEmail=email; G.clientPhone=phone;
+  const firstName=name.split(' ')[0];
+  document.getElementById('user_name_display').textContent=firstName;
+  document.getElementById('gate').classList.add('hidden');
+  document.getElementById('tool').classList.remove('hidden');
+  sendPrompt('Nouveau lead qualifié — Nom: '+name+' | Courriel: '+email+' | Téléphone: '+phone+' | A accédé au calculateur de qualification hypothécaire.');
+}
+
+// LENDER DATABASE — backed by published criteria
+// Sources: NerdWallet Canada, WOWA.ca, WeFin.ca (2025-2026)
+const LENDERS = [
+  // TIER A — BIG 6
+  {
+    id:'rbc', name:'RBC', tier:'A', tierLabel:'Banque A',
+    gdsMax:0.32,   // RBC applies stricter internal GDS of 32% per WOWA analysis
+    tdsMax:0.40,   // RBC internal TDS 40% — strictest of big banks
+    minCreditSalarie:680, minCreditAutonome:700,
+    minYears:1,    // 2 NOA preferred for self-employed
+    selfEmpIncMult:1.0, // 2-yr average NOA
+    helocLTV:0.65, // OSFI max for standalone HELOC
+    unsecMultiplier:0.30,
+    notes:'Critères les plus stricts des grandes banques. GDS 32% / TDS 40% en pratique.',
+    color:'bg0'
+  },
+  {
+    id:'td', name:'TD', tier:'A', tierLabel:'Banque A',
+    gdsMax:0.39, tdsMax:0.44,
+    minCreditSalarie:680, minCreditAutonome:680,
+    minYears:1,
+    selfEmpIncMult:1.0,
+    helocLTV:0.65,
+    unsecMultiplier:0.28,
+    notes:'Ratios CMHC standards. Forte présence au Québec.',
+    color:'bg0'
+  },
+  {
+    id:'bmo', name:'BMO', tier:'A', tierLabel:'Banque A',
+    gdsMax:0.39, tdsMax:0.44,
+    minCreditSalarie:680, minCreditAutonome:680,
+    minYears:1,
+    selfEmpIncMult:1.0,
+    helocLTV:0.65,
+    unsecMultiplier:0.28,
+    notes:'GDS 39% / TDS 44% standards. Garantie de taux 130 jours.',
+    color:'bg0'
+  },
+  {
+    id:'cibc', name:'CIBC', tier:'A', tierLabel:'Banque A',
+    gdsMax:0.38, tdsMax:0.42, // WOWA: CIBC GDS ~38% TDS ~42% in practice
+    minCreditSalarie:680, minCreditAutonome:680,
+    minYears:1,
+    selfEmpIncMult:1.0, // CIBC Self-Employed Recognition Mortgage requires 35% equity, no income proof
+    helocLTV:0.80, // CIBC Home Power Mortgage up to 80% total (HELOC portion max 65%)
+    unsecMultiplier:0.27,
+    notes:'GDS 38% / TDS 42% en pratique. Produit travailleur autonome (35% équité requis).',
+    color:'bg0'
+  },
+  {
+    id:'scotia', name:'Scotiabank', tier:'A', tierLabel:'Banque A',
+    gdsMax:0.37, tdsMax:0.45, // WOWA: Scotia GDS 37-38%, TDS ~45%
+    minCreditSalarie:680, minCreditAutonome:680,
+    minYears:1,
+    selfEmpIncMult:1.0,
+    helocLTV:0.65,
+    unsecMultiplier:0.28,
+    notes:'Produit STEP: ligne de crédit augmente automatiquement avec l\'équité.',
+    color:'bg0'
+  },
+  {
+    id:'tangerine', name:'Tangerine', tier:'A', tierLabel:'Banque A (en ligne)',
+    gdsMax:0.39, tdsMax:0.44,
+    minCreditSalarie:680, minCreditAutonome:680,
+    minYears:1,
+    selfEmpIncMult:0.95, // filiale Scotiabank, légèrement plus stricte pour TA
+    helocLTV:0.65,
+    unsecMultiplier:0.25,
+    notes:'Filiale Scotiabank. Taux compétitifs, 100% en ligne. Pas de succursales.',
+    color:'bg0'
+  },
+  // DESJARDINS / BNC
+  {
+    id:'desj', name:'Desjardins', tier:'A', tierLabel:'Banque A (Québec)',
+    gdsMax:0.39, tdsMax:0.44,
+    minCreditSalarie:680, minCreditAutonome:680,
+    minYears:1,
+    selfEmpIncMult:1.0,
+    helocLTV:0.65,
+    unsecMultiplier:0.30,
+    notes:'Meilleur accès au Québec. Forte flexibilité pour profils locaux.',
+    color:'bg0'
+  },
+  {
+    id:'bnc', name:'Banque Nationale', tier:'A', tierLabel:'Banque A (Québec)',
+    gdsMax:0.39, tdsMax:0.44,
+    minCreditSalarie:680, minCreditAutonome:680,
+    minYears:1,
+    selfEmpIncMult:1.0,
+    helocLTV:0.65,
+    unsecMultiplier:0.30,
+    notes:'Forte présence au Québec. Bonne flexibilité pour TA avec dossier solide.',
+    color:'bg0'
+  },
+  // TIER B
+  {
+    id:'eqbank', name:'Prêteur B (Équitable/CMLS)', tier:'B', tierLabel:'Prêteur B',
+    gdsMax:0.44, tdsMax:0.50,
+    minCreditSalarie:600, minCreditAutonome:620,
+    minYears:0,
+    selfEmpIncMult:0.85,
+    helocLTV:0.65,
+    unsecMultiplier:0.15,
+    notes:'GDS jusqu\'à 44%, TDS jusqu\'à 50%. Minimum crédit 600. Taux plus élevés.',
+    color:'ba'
+  },
+  // PRIVÉ
+  {
+    id:'prive', name:'Financement privé', tier:'Privé', tierLabel:'Privé',
+    gdsMax:0.99, tdsMax:0.99, // pas de ratio, basé sur collatéral
+    minCreditSalarie:0, minCreditAutonome:0,
+    minYears:0,
+    selfEmpIncMult:1.0,
+    helocLTV:0, // pas de HELOC en privé
+    unsecMultiplier:0,
+    notes:'Basé sur collatéral uniquement. 75% LTV moins solde hypothécaire. Pas de HELOC. Taux 8-14%. Court terme 6-24 mois.',
+    color:'bgr'
+  }
+];
+
+function calcMaxMort(inc,inc2,emp,yrs,rt,mrt,car,crd,loc,oth,ren,lender){
+  const tot=(inc+inc2);
+  let mult=1;
+  if(emp==='autonome') mult = yrs==='2plus' ? lender.selfEmpIncMult : lender.selfEmpIncMult*0.75;
+  if(emp==='parttime') mult=.85;
+  if(emp==='mixte') mult=.90;
+  const qi=tot*mult, qm=qi/12;
+  const sr=Math.max(rt+2,5.25);
+  const ra=ren*.5;
+  const td=mrt+car+crd+loc+oth;
+  const mr=sr/100/12, n=300;
+  const p100=(mr*Math.pow(1+mr,n))/(Math.pow(1+mr,n)-1)*100000;
+  const pv=G.pv||0, tx=pv*.01/12, ht=150;
+  const mgds=((qm*lender.gdsMax-tx-ht+ra)/p100)*100000;
+  const mtds=((qm*lender.tdsMax-td-tx-ht+ra)/p100)*100000;
+  return {mm:Math.min(mgds,mtds), qi, td, qm};
+}
+
+function calcBaseMetrics(inc,inc2,emp,cred,yrs,rt,mrt,car,crd,loc,oth,sav,pt,mb,ren){
+  const tot=inc+inc2;
+  let mult=1;
+  if(emp==='autonome') mult=yrs==='2plus'?1:.75;
+  if(emp==='parttime') mult=.85;
+  if(emp==='mixte') mult=.90;
+  const qi=tot*mult, qm=qi/12;
+  const sr=Math.max(rt+2,5.25);
+  const ra=ren*.5, td=mrt+car+crd+loc+oth;
+  const mr=sr/100/12, n=300;
+  const pv=G.pv||0, tx=pv*.01/12, ht=150;
+  const tpmt=(mr*Math.pow(1+mr,n))/(Math.pow(1+mr,n)-1)*Math.max(0,pv-sav);
+  const gds=(tpmt+tx+ht-ra)/qm;
+  const tds=(tpmt+tx+ht+td-ra)/qm;
+  function mdp(p,t){if(t==='5plus')return p*.2;if(p<=500000)return p*.05;if(p<=999999)return 25000+(p-500000)*.1;return p*.2;}
+  const mindp=mdp(pv,pt), dpok=sav>=mindp;
+  const cf={excellent:1,bon:.95,passable:.85,faible:.65}[cred];
+  const heloc=Math.round(Math.max(0,pv*.65-mb)*cf);
+  const lb={excellent:.33,bon:.25,passable:.18,faible:.10}[cred];
+  const unsec=Math.round(qi*lb*(yrs==='2plus'?1:.75));
+  return{gds,tds,mindp,dpok,heloc,unsec,td,qi,qm,sr};
+}
+
+function lenderStatus(lender, inc,inc2,emp,cred,yrs,rt,mrt,car,crd,loc,oth,sav,pt,mb,ren){
+  const pv=G.pv||0;
+  const creditVal={excellent:780,bon:724,passable:674,faible:620}[cred];
+  const minCred=emp==='autonome'?lender.minCreditAutonome:lender.minCreditSalarie;
+  const yearsNum={less1:0.5,'1to2':1.5,'2plus':3}[yrs];
+
+  // Privé: only collateral
+  if(lender.id==='prive'){
+    const mb2=parseFloat(document.getElementById('mb').value)||0;
+    const privMax=Math.max(0,pv*.75-mb2);
+    return{ok:true,borrow:fc(Math.round(privMax)),heloc:'N/A — privé',loc:'—',label:'Court terme',color:'bgr'};
+  }
+
+  const {mm}=calcMaxMort(inc,inc2,emp,yrs,rt,mrt,car,crd,loc,oth,ren,lender);
+  const base=calcBaseMetrics(inc,inc2,emp,cred,yrs,rt,mrt,car,crd,loc,oth,sav,pt,mb,ren);
+
+  const creditOk=creditVal>=minCred;
+  const yearsOk=yearsNum>=lender.minYears;
+
+  // For self-employed, require 2 yrs for Tier A (except CIBC Self-Emp Recognition product)
+  const selfEmpOk = emp!=='autonome' || yrs==='2plus' || lender.id==='cibc'||lender.tier==='B';
+
+  const gdsOk=base.gds<=lender.gdsMax;
+  const tdsOk=base.tds<=lender.tdsMax;
+
+  // Mise de fonds
+  function mdp(p,t){if(t==='5plus')return p*.2;if(p<=500000)return p*.05;if(p<=999999)return 25000+(p-500000)*.1;return p*.2;}
+  const mindp=mdp(pv,pt);
+  const dpOk=sav>=mindp;
+  const dpBOk=sav>=pv*.15; // B lender accepts 15%
+
+  let ok=false,label='',color='br0',cond=false;
+  if(lender.tier==='A'){
+    ok=creditOk&&yearsOk&&selfEmpOk&&gdsOk&&tdsOk&&dpOk;
+    cond=!ok&&creditOk&&(base.gds<=lender.gdsMax+.02)&&(base.tds<=lender.tdsMax+.02)&&dpOk;
+    label=ok?'Admissible':cond?'Conditionnel':'Non admissible';
+    color=ok?'bg0':cond?'ba':'br0';
+  } else if(lender.tier==='B'){
+    ok=creditOk&&(gdsOk||base.gds<=0.44)&&(tdsOk||base.tds<=0.50)&&(dpOk||dpBOk);
+    label=ok?'Admissible':'Non admissible';
+    color=ok?'ba':'br0';
+  }
+
+  // HELOC calc
+  const cf={excellent:1,bon:.95,passable:.85,faible:.65}[cred];
+  const helocAmt=Math.round(Math.max(0,pv*lender.helocLTV-parseFloat(document.getElementById('mb').value)||0)*cf);
+  const helocStr=lender.helocLTV>0&&ok?(helocAmt>0?fc(helocAmt):'Selon équité'):'—';
+
+  // Unsec LOC
+  const lb={excellent:.33,bon:.25,passable:.18,faible:.10}[cred];
+  const unsecAmt=Math.round((inc+inc2)*lb*(yrs==='2plus'?1:.75)*lender.unsecMultiplier);
+  const locStr=ok&&lender.unsecMultiplier>0?fc(unsecAmt):'—';
+
+  return{ok,cond,borrow:ok||cond?fc(Math.max(0,Math.round(mm))):'Non admissible',heloc:helocStr,loc:locStr,label,color};
+}
+
+function go(n){
+  if(n===2&&!parseFloat(document.getElementById('inc').value)){document.getElementById('e1').style.display='block';return;}
+  document.getElementById('e1').style.display='none';
+  if(n===3&&document.getElementById('sav').value===''){document.getElementById('e2').style.display='block';return;}
+  document.getElementById('e2').style.display='none';
+  ['s1','s2','s3','sl','res'].forEach(id=>document.getElementById(id).classList.add('hidden'));
+  const el=document.getElementById('s'+n);if(el)el.classList.remove('hidden');
+  const lb2={1:'Revenus & emploi',2:'Dettes & obligations',3:'Propriété visée'};
+  document.getElementById('slb').textContent=lb2[n]||'';
+  [1,2,3].forEach(i=>{const d=document.getElementById('d'+i);d.classList.remove('active','done');if(i<n)d.classList.add('done');else if(i===n)d.classList.add('active');});
+}
+
+function sim(){
+  if(!G.pv)return;
+  const dr=parseFloat(document.getElementById('sd1x').value)||0;
+  const ii=parseFloat(document.getElementById('sd2x').value)||0;
+  const di=parseFloat(document.getElementById('sd3x').value)||0;
+  const ri=parseFloat(document.getElementById('sd4x').value)||0;
+  const r=calcBaseMetrics(G.inc+ii,G.inc2,G.emp,G.cred,G.yrs,G.rt,G.mrt,G.car,G.crd,G.loc,Math.max(0,G.oth-dr),G.sav+di,G.pt,G.mb,G.ren+ri);
+  // use TD as reference for simulation (standard 39/44)
+  const ref=LENDERS.find(l=>l.id==='td');
+  const {mm:mmNew}=calcMaxMort(G.inc+ii,G.inc2,G.emp,G.yrs,G.rt,G.mrt,G.car,G.crd,G.loc,Math.max(0,G.oth-dr),G.ren+ri,ref);
+  const md=mmNew-G.baseCapacity, gd=r.gds-G.b.gds, td=r.tds-G.b.tds;
+  const gc=r.gds>.39?'#c94040':r.gds>.32?'#c97a0a':'#1D9E75';
+  const tc=r.tds>.44?'#c94040':r.tds>.38?'#c97a0a':'#1D9E75';
+  document.getElementById('simres').innerHTML=`
+    <div class="smc"><div class="smcl">Capacité (réf. TD)</div><div class="smcb">${fc(Math.round(G.baseCapacity))}</div><div class="smca" style="color:${md>0?'#1D9E75':md<0?'#c94040':'#1a1a1a'}">${fc(Math.round(mmNew))}</div><div class="smd ${md>0?'dp':md<0?'dn':'dn2'}">${md>0?'+':''}${fc(Math.round(md))}</div></div>
+    <div class="smc"><div class="smcl">GDS</div><div class="smcb">${fp(G.b.gds)}</div><div class="smca" style="color:${gc}">${fp(r.gds)}</div><div class="smd ${gd<0?'dp':gd>0?'dn':'dn2'}">${gd<0?'':'+'}${Math.round(gd*100)}%</div></div>
+    <div class="smc"><div class="smcl">TDS</div><div class="smcb">${fp(G.b.tds)}</div><div class="smca" style="color:${tc}">${fp(r.tds)}</div><div class="smd ${td<0?'dp':td>0?'dn':'dn2'}">${td<0?'':'+'}${Math.round(td*100)}%</div></div>`;
+  document.getElementById('simrat').innerHTML=`
+    <div class="rr"><div class="rh"><span class="rn">GDS simulé — limite 39%</span><span style="font-size:13px;font-weight:600;color:${gc}">${fp(r.gds)}</span></div><div class="bt2" style="margin-top:4px"><div class="bf" style="width:${Math.min(r.gds/.5,1)*100}%;background:${gc}"></div><div class="blx" style="left:78%"></div></div></div>
+    <div class="rr" style="margin-top:10px"><div class="rh"><span class="rn">TDS simulé — limite 44%</span><span style="font-size:13px;font-weight:600;color:${tc}">${fp(r.tds)}</span></div><div class="bt2" style="margin-top:4px"><div class="bf" style="width:${Math.min(r.tds/.55,1)*100}%;background:${tc}"></div><div class="blx" style="left:80%"></div></div></div>`;
+}
+
+function dlPDF(){
+  if(!G.pv){return;}
+  const ai=document.getElementById('ait').textContent;
+  const date=new Date().toLocaleDateString('fr-CA',{year:'numeric',month:'long',day:'numeric'});
+  const sl2=G.score>=75?'Dossier solide':G.score>=50?'Dossier passable':'Dossier à renforcer';
+  const empLabels={salarie:'Salarié (temps plein)',parttime:'Salarié (temps partiel)',autonome:'Travailleur autonome',mixte:'Revenus mixtes'};
+  const credLabels={excellent:'Excellent (750+)',bon:'Bon (700–749)',passable:'Passable (650–699)',faible:'Faible (moins de 650)'};
+  const yrsLabels={'2plus':'2 ans et plus','1to2':'1 à 2 ans',less1:"Moins d'un an"};
+  const ptLabels={condo:'Condo / unifamiliale',duplex:'Duplex (occupé)',triplex:'Triplex (occupé)',quadruplex:'Quadruplex (occupé)','5plus':'5 logements et plus'};
+  const payload={
+    date, score:G.score, score_label:sl2,
+    rate:G.rt, stress_rate:parseFloat(Math.max(G.rt+2,5.25).toFixed(2)),
+    revenu:G.inc+G.inc2, dettes:G.b.td, epargne:G.sav,
+    propval:G.pv, proptype:ptLabels[G.pt]||G.pt,
+    emp:empLabels[G.emp]||G.emp, credit:credLabels[G.cred]||G.cred, anciennete:yrsLabels[G.yrs]||G.yrs,
+    gds:parseFloat(G.b.gds.toFixed(4)), tds:parseFloat(G.b.tds.toFixed(4)),
+    mindp:G.b.mindp, dpok:G.b.dpok, heloc:G.b.heloc, unsec:G.b.unsec,
+    lenders:G.lendResults.map(l=>({name:l.name,tier:l.tier,borrow:l.borrow,heloc:l.heloc,loc:l.loc,status:l.label,notes:l.notes||''})),
+    leviers:G.levs.map(l=>({titre:l.t,detail:l.d,impact:l.i})),
+    analyse:ai
+  };
+  const msg='GENERER_PDF_RAPPORT '+JSON.stringify(payload);
+  sendPrompt(msg);
+  document.getElementById('pdfmsg').style.display='block';
+}
+
+async function run(){
+  const pv=parseFloat(document.getElementById('pv').value);
+  if(!pv){document.getElementById('e3').style.display='block';return;}
+  document.getElementById('e3').style.display='none';
+  G.inc=parseFloat(document.getElementById('inc').value)||0;
+  G.inc2=parseFloat(document.getElementById('inc2').value)||0;
+  G.emp=document.getElementById('emp').value;
+  G.cred=document.getElementById('cred').value;
+  G.yrs=document.getElementById('yrs').value;
+  G.rt=parseFloat(document.getElementById('rt').value)||4.89;
+  G.mrt=parseFloat(document.getElementById('mrt').value)||0;
+  G.car=parseFloat(document.getElementById('car').value)||0;
+  G.crd=parseFloat(document.getElementById('crd').value)||0;
+  G.loc=parseFloat(document.getElementById('loc').value)||0;
+  G.oth=parseFloat(document.getElementById('oth').value)||0;
+  G.sav=parseFloat(document.getElementById('sav').value)||0;
+  G.pt=document.getElementById('pt').value;
+  G.pv=pv;
+  G.mb=parseFloat(document.getElementById('mb').value)||0;
+  G.ren=parseFloat(document.getElementById('ren').value)||0;
+
+  ['s1','s2','s3','res'].forEach(id=>document.getElementById(id).classList.add('hidden'));
+  document.getElementById('sl').classList.remove('hidden');
+
+  const pf=document.getElementById('pf'),pm=document.getElementById('pm');
+  const msgs=['Vérification des critères RBC, CIBC, BMO, TD...','Analyse Scotia, Tangerine, Desjardins, BNC...','Application du stress test OSFI B-20...','Calcul GDS/TDS par prêteur...','Comparaison financement privé vs institutionnel...'];
+  let p=0,mi=0;
+  const iv=setInterval(()=>{p+=1.2;pf.style.width=Math.min(p,90)+'%';if(p>18&&mi<1){pm.textContent=msgs[1];mi++;}if(p>36&&mi<2){pm.textContent=msgs[2];mi++;}if(p>54&&mi<3){pm.textContent=msgs[3];mi++;}if(p>72&&mi<4){pm.textContent=msgs[4];mi++;}if(p>=90)clearInterval(iv);},80);
+
+  G.b=calcBaseMetrics(G.inc,G.inc2,G.emp,G.cred,G.yrs,G.rt,G.mrt,G.car,G.crd,G.loc,G.oth,G.sav,G.pt,G.mb,G.ren);
+
+  // Base capacity using TD standard
+  const tdRef=LENDERS.find(l=>l.id==='td');
+  const {mm:tdMM}=calcMaxMort(G.inc,G.inc2,G.emp,G.yrs,G.rt,G.mrt,G.car,G.crd,G.loc,G.oth,G.ren,tdRef);
+  G.baseCapacity=Math.max(0,tdMM);
+
+  // Score
+  let sc=100;
+  if(G.cred==='faible')sc-=30;else if(G.cred==='passable')sc-=15;else if(G.cred==='bon')sc-=5;
+  if(G.b.tds>.44)sc-=25;else if(G.b.tds>.39)sc-=12;
+  if(G.b.gds>.39)sc-=20;else if(G.b.gds>.33)sc-=8;
+  if(!G.b.dpok)sc-=15;
+  if(G.yrs==='less1')sc-=15;else if(G.yrs==='1to2')sc-=7;
+  if(G.emp==='autonome'&&G.yrs!=='2plus')sc-=10;
+  G.score=Math.max(0,Math.min(100,sc));
+  const sco=G.score>=75?'#1D9E75':G.score>=50?'#c97a0a':'#c94040';
+  const sl2=G.score>=75?'Dossier solide':G.score>=50?'Dossier passable':'Dossier à renforcer';
+
+  // Lender results
+  G.lendResults=LENDERS.map(l=>{
+    const st=lenderStatus(l,G.inc,G.inc2,G.emp,G.cred,G.yrs,G.rt,G.mrt,G.car,G.crd,G.loc,G.oth,G.sav,G.pt,G.mb,G.ren);
+    return{...l,...st};
+  });
+
+  // Leviers
+  G.levs=[];
+  if(G.b.tds>.38){const g2=Math.round(200*12/(G.rt/100)*.8);G.levs.push({t:'Réduire les dettes mensuelles',d:`Ton TDS est à ${fp(G.b.tds)}. Chaque 200$/mois éliminé libère environ ${fc(g2)} en capacité.`,i:`Impact estimé: +${fc(g2)} de capacité par 200$/mois remboursé`});}
+  if(G.cred==='passable'||G.cred==='faible')G.levs.push({t:'Améliorer le score de crédit',d:'Rembourser les cartes sous 30% de leur limite et éviter toute nouvelle demande 90 jours avant dépôt peut gagner 30-50 points. Passer de passable à bon ouvre RBC, CIBC et Scotia.',i:'Impact: accès prêteur A + meilleurs taux sur 25 ans'});
+  if(!G.b.dpok)G.levs.push({t:`Combler la mise de fonds — manque: ${fc(Math.max(0,G.b.mindp-G.sav))}`,d:'CELIAPP (40 000$ non imposable), RAP REER (35 000$/personne), ou don familial documenté.',i:`Manque: ${fc(Math.max(0,G.b.mindp-G.sav))}`});
+  if(G.ren===0&&(G.pt==='duplex'||G.pt==='triplex'||G.pt==='quadruplex'))G.levs.push({t:'Déclarer les revenus locatifs',d:'50% des revenus locatifs comptent dans tous les prêteurs A/B. Sur un triplex avec 2 loyers à 1 200$/mois = ~180 000$ de capacité de plus.',i:'Impact: +150 000$ à +250 000$ de capacité'});
+  if(G.emp==='autonome'&&G.yrs!=='2plus')G.levs.push({t:'Attendre 2 ans d\'historique fiscal (travailleur autonome)',d:'RBC, CIBC, TD, BMO exigent 2 NOA. CIBC offre un produit sans preuve de revenu avec 35% d\'équité.',i:'Impact: +15% à +25% sur le revenu qualifiant'});
+  if(G.levs.length===0)G.levs.push({t:'Dossier bien optimisé',d:'Ratios, crédit et mise de fonds sont alignés. Obtenez une préapprobation officielle pour accélérer le processus.',i:'Prochaine étape: préapprobation en 48h'});
+
+  const pl={condo:'condo/unifamiliale',duplex:'duplex',triplex:'triplex',quadruplex:'quadruplex','5plus':'5 logements et plus'};
+  const admissibles=G.lendResults.filter(l=>l.ok).map(l=>l.name).join(', ')||'Aucun prêteur A';
+  const ap=`Tu es un agent de qualification hypothécaire québécois expert. Génère une analyse personnalisée de 5-7 phrases en français, au "tu", directe, sans bullet points.
+
+Inclus: 1) verdict honnête sur le dossier 2) meilleur prêteur recommandé et pourquoi 3) conseil sur la marge de crédit 4) prochaine étape concrète.
+
+Profil: revenu ${fc(G.inc+G.inc2)}/an (${G.emp}), ancienneté ${G.yrs}, crédit ${G.cred}, dettes ${fc(G.b.td)}/mois, épargne ${fc(G.sav)}, propriété ${fc(pv)} (${pl[G.pt]}), mise requise ${fc(G.b.mindp)} (ok: ${G.b.dpok?'oui':'non'}), GDS ${fp(G.b.gds)}, TDS ${fp(G.b.tds)}, capacité max ${fc(Math.max(0,G.baseCapacity))}, HELOC ${fc(G.b.heloc)}, marge non garantie ${fc(G.b.unsec)}, prêteurs admissibles: ${admissibles}, score: ${G.score}/100, stress test: ${Math.max(G.rt+2,5.25).toFixed(2)}%.
+
+Note: RBC a des critères plus stricts (GDS 32%/TDS 40%). CIBC GDS 38%/TDS 42%. Scotia GDS 37-38%. BMO et TD standards 39/44.
+
+Réponds uniquement avec l'analyse.`;
+
+  let ai='';
+  try{const r2=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:ap}]})});const d=await r2.json();ai=d.content?.[0]?.text||'';}catch(e){ai='Analyse temporairement indisponible.';}
+
+  clearInterval(iv);pf.style.width='100%';
+  setTimeout(()=>{
+    document.getElementById('sl').classList.add('hidden');
+    const gc2=G.b.gds>.39?'#c94040':G.b.gds>.32?'#c97a0a':'#1D9E75';
+    const tc2=G.b.tds>.44?'#c94040':G.b.tds>.38?'#c97a0a':'#1D9E75';
+
+    document.getElementById('sc').innerHTML=`<div class="scr" style="border-color:${sco}"><div class="sn" style="color:${sco}">${G.score}</div><div class="slbl2">/100</div></div><div><div class="sdt" style="color:${sco}">${sl2}</div><div class="sds">${G.score>=75?'Bien positionné pour qualifier chez un prêteur de rang A.':G.score>=50?'Quelques ajustements peuvent améliorer vos options.':'Actions ciblées nécessaires avant de déposer.'}</div></div>`;
+    document.getElementById('mtop').innerHTML=`
+      <div class="m">
+        <div class="ml">HELOC — marge garantie</div>
+        <div class="mv ${G.b.heloc>0?'green':''}">${G.b.heloc>0?fc(G.b.heloc):'Non applicable'}</div>
+        <div style="font-size:11px;color:#999;margin-top:4px">Post-achat · 65% LTV OSFI moins solde hyp. · Taux pref. + 0.5%</div>
+      </div>
+      <div class="m">
+        <div class="ml">Marge personnelle (estimée)</div>
+        <div class="mv">${fc(G.b.unsec)}</div>
+        <div style="font-size:11px;color:#999;margin-top:4px">Non garantie · Basée sur revenus + crédit · Taux pref. + 3–7%</div>
+      </div>`;
+    document.getElementById('ratbars').innerHTML=`<div class="rr"><div class="rh"><span class="rn">GDS — limite 39% (RBC: 32%)</span><span style="font-size:13px;font-weight:600;color:${gc2}">${fp(G.b.gds)}</span></div><div class="bt2" style="margin-top:4px"><div class="bf" style="width:${Math.min(G.b.gds/.5,1)*100}%;background:${gc2}"></div><div class="blx" style="left:64%" title="RBC 32%"></div><div class="blx" style="left:78%"></div></div><div style="display:flex;justify-content:space-between;font-size:10px;color:#bbb;margin-top:2px"><span>RBC: 32%</span><span>Standard: 39%</span></div></div><div class="rr" style="margin-top:8px"><div class="rh"><span class="rn">TDS — limite 44% (RBC: 40%)</span><span style="font-size:13px;font-weight:600;color:${tc2}">${fp(G.b.tds)}</span></div><div class="bt2" style="margin-top:4px"><div class="bf" style="width:${Math.min(G.b.tds/.55,1)*100}%;background:${tc2}"></div><div class="blx" style="left:72.7%" title="RBC 40%"></div><div class="blx" style="left:80%"></div></div><div style="display:flex;justify-content:space-between;font-size:10px;color:#bbb;margin-top:2px"><span>RBC: 40%</span><span>Standard: 44%</span></div></div>`;
+    document.getElementById('dph').innerHTML=`<div class="dpl">Mise de fonds requise — ${fc(G.pv)}</div><div class="dpv">${fc(G.b.mindp)} ${G.b.dpok?'— Suffisante':'— Manque '+fc(Math.max(0,G.b.mindp-G.sav))}</div>`;
+    document.getElementById('locs').innerHTML=`<div class="lc"><div class="lt2">Marge garantie (HELOC)</div><div class="la">${G.b.heloc>0?fc(G.b.heloc):'Non applicable'}</div><div class="ld">65% LTV OSFI — après acquisition. Non disponible chez les prêteurs privés.</div></div><div class="lc"><div class="lt2">Marge non garantie (personnelle)</div><div class="la">${fc(G.b.unsec)}</div><div class="ld">Estimation — revenus qualifiants, ancienneté et crédit.</div></div>`;
+    sim();
+    document.getElementById('levs').innerHTML=G.levs.map(l=>`<div class="lv"><div class="lvt">${l.t}</div><div class="lvd">${l.d}</div><div class="lvi">${l.i}</div></div>`).join('');
+
+    // Build lender table with tier separators
+    let rows='';
+    let lastTier='';
+    G.lendResults.forEach(l=>{
+      if(l.tier!==lastTier){
+        const tierNames={'A':'Prêteurs A — institutionnels','B':'Prêteur B — alternatif','Privé':'Financement privé'};
+        rows+=`<tr class="tier-sep"><td colspan="5">${tierNames[l.tier]||l.tier}</td></tr>`;
+        lastTier=l.tier;
+      }
+      rows+=`<tr><td><strong>${l.name}</strong><br><span style="font-size:11px;color:#999">${l.notes}</span></td><td>${l.borrow}</td><td>${l.heloc}</td><td>${l.loc}</td><td><span class="bk ${l.color}">${l.label}</span></td></tr>`;
+    });
+    document.getElementById('ltb').innerHTML=rows;
+    document.getElementById('ait').textContent=ai;
+    document.getElementById('res').classList.remove('hidden');
+    document.getElementById('res').scrollIntoView({behavior:'smooth',block:'start'});
+    [1,2,3].forEach(i=>{const d=document.getElementById('d'+i);d.classList.remove('active','done');d.classList.add('done');});
+    document.getElementById('slb').textContent='Résultats';
+  },500);
+}
+</script>
+</body>
+</html>
