@@ -267,7 +267,18 @@ function unlockTool(){
   document.getElementById('user_name_display').textContent=firstName;
   document.getElementById('gate').classList.add('hidden');
   document.getElementById('tool').classList.remove('hidden');
-  sendPrompt('Nouveau lead qualifié — Nom: '+name+' | Courriel: '+email+' | Téléphone: '+phone+' | A accédé au calculateur de qualification hypothécaire.');
+  fetch('https://services.leadconnectorhq.com/hooks/Jx3JAtF1fs1oSd3ixAdI/webhook-trigger/36030055-55b2-432a-b8f5-a269618e8e9b', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      first_name: name.split(' ')[0],
+      last_name: name.split(' ').slice(1).join(' '),
+      email: email,
+      phone: phone,
+      source: 'Calculateur de qualification hypothécaire',
+      tags: ['lead-calculateur-hypo']
+    })
+  }).catch(function(){});
 }
 
 // LENDER DATABASE — backed by published criteria
