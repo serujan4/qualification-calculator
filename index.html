@@ -81,11 +81,14 @@ function unlock(){
     return;
   }
   document.getElementById("gate_err").style.display="none";
-  fetch("https://hooks.zapier.com/hooks/catch/6506141/upg7s3k/",{
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({first_name:name.split(" ")[0],last_name:name.split(" ").slice(1).join(" "),email:email,phone:phone,source:"Calculateur de qualification hypothecaire",tags:"lead-calculateur-hypo"})
-  }).catch(function(){});;
+  var fd=new FormData();
+  fd.append("first_name",name.split(" ")[0]);
+  fd.append("last_name",name.split(" ").slice(1).join(" "));
+  fd.append("email",email);
+  fd.append("phone",phone);
+  fd.append("source","Calculateur de qualification hypothecaire");
+  fd.append("tags","lead-calculateur-hypo");
+  fetch("https://hooks.zapier.com/hooks/catch/6506141/upg7s3k/",{method:"POST",body:fd}).catch(function(){});;
   var params=new URLSearchParams({n:name,e:email,p:phone});
   window.location.href="tool.html?"+params.toString();
 }
