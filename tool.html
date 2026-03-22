@@ -420,7 +420,19 @@ async function run(){
 document.addEventListener("DOMContentLoaded",function(){
   var params=new URLSearchParams(window.location.search);
   var name=params.get("n")||"";
+  var email=params.get("e")||"";
+  var phone=params.get("p")||"";
   if(name)document.getElementById("uname").textContent=name.split(" ")[0];
+  if(name&&email&&phone){
+    var fd=new FormData();
+    fd.append("first_name",name.split(" ")[0]);
+    fd.append("last_name",name.split(" ").slice(1).join(" "));
+    fd.append("email",email);
+    fd.append("phone",phone);
+    fd.append("source","Calculateur de qualification hypothecaire");
+    fd.append("tags","lead-calculateur-hypo");
+    fetch("https://hooks.zapier.com/hooks/catch/6506141/upg7s3k/",{method:"POST",body:fd}).catch(function(){});
+  }
 
   document.getElementById("btn1").addEventListener("click",function(){go(2);});
   document.getElementById("btn2").addEventListener("click",function(){go(3);});
